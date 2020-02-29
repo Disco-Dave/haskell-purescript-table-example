@@ -1,5 +1,3 @@
-{-# LANGUAGE TypeApplications #-}
-
 module Api
   ( DbEnv
   , makeDbEnv

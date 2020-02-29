@@ -36,6 +36,7 @@ default-extensions:
 - NoImplicitPrelude
 - OverloadedStrings
 - RecordWildCards
+- TypeApplications
 - TypeOperators
 
 dependencies:
