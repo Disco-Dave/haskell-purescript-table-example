@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "spago build && parcel build assets/index.html",
-    "dev": "spago build --watch -x & parcel assets/index.html"
+    "dev": "spago build --watch -x & parcel assets/index.html",
+    "docs": "spago docs --open"
   },
   "keywords": [],
   "author": "",
