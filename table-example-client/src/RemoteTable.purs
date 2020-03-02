@@ -183,8 +183,7 @@ renderPageSize state =
 renderPageSelector :: forall row m. State row -> H.ComponentHTML Action () m
 renderPageSelector state = 
   HH.span 
-  [ HP.class_ $ H.ClassName "remote-table-page-selector"
-  ] 
+  [ HP.class_ $ H.ClassName "remote-table-page-selector" ] 
   case state.response of
     Nothing -> []
     Just response -> 
