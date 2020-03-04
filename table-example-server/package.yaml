@@ -46,6 +46,7 @@ dependencies:
 - servant
 - servant-server
 - text
+- wai-cors
 - warp
 
 library:

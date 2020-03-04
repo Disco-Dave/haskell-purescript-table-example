@@ -49,7 +49,7 @@ type Column row
 type Slot = H.Slot Identity Void
 
 type Input row
-  = { getRows :: PaginatedRequest -> Aff (PaginatedResponse row)
+  = { getRows :: PaginatedRequest -> Aff (Maybe (PaginatedResponse row))
     , columns :: Array (Column row)
     , pageSize :: Int
     , sortColumn :: String
@@ -57,7 +57,7 @@ type Input row
     }
 
 type State row
-  = { getRows :: PaginatedRequest -> Aff (PaginatedResponse row)
+  = { getRows :: PaginatedRequest -> Aff (Maybe (PaginatedResponse row))
     , response :: Maybe (PaginatedResponse row)
     , columns :: Array (Column row)
     , pageSize :: Int
@@ -103,7 +103,7 @@ handleAction Refresh = do
                 }
   H.modify_ (_ { isRequestActive = true })
   response <- liftAff $ oldState.getRows request
-  H.modify_ (_ { response = Just response, isRequestActive = false })
+  H.modify_ (_ { response = response, isRequestActive = false })
 
 handleAction (Sort remoteName) = do
   H.modify_ \oldState ->
@@ -122,7 +122,7 @@ handleAction (ChangePage page) = do
   handleAction Refresh
 
 handleAction (ChangePageSize pageSize) = do
-  when (pageSize >= 1) $ H.modify_ (_ { pageSize = pageSize })
+  when (pageSize >= 1) $ H.modify_ (_ { pageSize = pageSize, page = 0 })
   handleAction Refresh
 
 
