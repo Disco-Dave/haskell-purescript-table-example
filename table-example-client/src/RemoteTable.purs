@@ -21,6 +21,9 @@ import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
+import Utils.Events as Events
+import Web.UIEvent.MouseEvent (MouseEvent)
+import Web.UIEvent.MouseEvent as MouseEvent
 
 
 type PaginatedResponse row
@@ -69,7 +72,7 @@ type State row
 
 data Action
   = Sort String
-  | ChangePage Int
+  | ChangePage MouseEvent Int
   | ChangePageSize Int
   | Refresh
 
@@ -117,7 +120,8 @@ handleAction (Sort remoteName) = do
         }
   handleAction Refresh
 
-handleAction (ChangePage page) = do
+handleAction (ChangePage evt page) = do
+  Events.preventDefault evt
   when (page >= 0) $ H.modify_ (_ { page = page })
   handleAction Refresh
 
@@ -190,14 +194,18 @@ renderPageSelector state =
       [ if state.page > 0 
           then 
             HH.a 
-            [ HE.onClick $ \_ -> Just $ ChangePage $ state.page - 1 ]
+            [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page - 1 
+            , HP.href "#"
+            ]
             [ HH.text "Previous" ]
           else
             HH.text ""
       , if state.page < response.totalPages - 1
           then
             HH.a 
-            [ HE.onClick $ \_ -> Just $ ChangePage $ state.page + 1 ]
+            [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page + 1 
+            , HP.href "#"
+            ]
             [ HH.text "Next" ]
           else
             HH.text ""

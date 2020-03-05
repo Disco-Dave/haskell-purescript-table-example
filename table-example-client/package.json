@@ -5,7 +5,8 @@
   "scripts": {
     "build": "spago build && parcel build assets/index.html",
     "dev": "spago build --watch -x & parcel assets/index.html",
-    "docs": "spago docs --open"
+    "docs": "spago docs --open",
+    "clean": "rm -rf .cache .spago dist output"
   },
   "keywords": [],
   "author": "",
