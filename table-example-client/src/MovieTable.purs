@@ -10,7 +10,6 @@ import Data.Maybe (Maybe(..))
 import Data.Symbol (SProxy(..))
 import Data.Tuple (Tuple(..))
 import Effect.Aff (Aff)
-import Effect.Aff.Class (class MonadAff)
 import RemoteTable as R
 import URI.Extra.QueryPairs as QP
 import URI.Query as Q
@@ -54,7 +53,7 @@ _movies = SProxy
 
 type Slot = H.Slot Identity Void
 
-component :: forall q o i m. MonadAff m => H.Component HH.HTML q i o m
+component :: forall q o i.  H.Component HH.HTML q i o Aff
 component = 
   H.mkComponent
   { initialState: identity
@@ -63,7 +62,7 @@ component =
   }
 
 
-render :: forall q m. MonadAff m => q -> H.ComponentHTML q ChildSlots m
+render :: forall q. q -> H.ComponentHTML q ChildSlots Aff
 render _ = HH.slot _movies unit R.component input absurd 
   where input = { getRows: getMovies
                 , pageSize: 10

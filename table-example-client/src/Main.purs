@@ -3,7 +3,7 @@ module Main where
 import Prelude
 import Data.Symbol (SProxy(..))
 import Effect (Effect)
-import Effect.Aff.Class (class MonadAff)
+import Effect.Aff (Aff)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.Aff as HA
@@ -17,7 +17,7 @@ type ChildSlots =
 _movies :: SProxy "movies"
 _movies = SProxy
 
-mainComponent :: forall q i o m. MonadAff m => H.Component HH.HTML q i o m
+mainComponent :: forall q i o. H.Component HH.HTML q i o Aff
 mainComponent =
   H.mkComponent
     { initialState: const unit

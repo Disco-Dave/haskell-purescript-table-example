@@ -9,21 +9,20 @@ module RemoteTable
   ) where
 
 import Prelude
+import Control.Monad.Trans.Class (lift)
 import DOM.HTML.Indexed.InputType (InputType(..))
 import DOM.HTML.Indexed.StepValue (StepValue(..))
 import Data.Identity (Identity)
 import Data.Int as Int
 import Data.Maybe (Maybe(..))
 import Data.Tuple (Tuple(..))
-import Effect.Aff (Aff)
-import Effect.Aff.Class (class MonadAff, liftAff)
+import Effect.Class (class MonadEffect)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Utils.Events as Events
 import Web.UIEvent.MouseEvent (MouseEvent)
-import Web.UIEvent.MouseEvent as MouseEvent
 
 
 type PaginatedResponse row
@@ -51,16 +50,16 @@ type Column row
 
 type Slot = H.Slot Identity Void
 
-type Input row
-  = { getRows :: PaginatedRequest -> Aff (Maybe (PaginatedResponse row))
+type Input m row
+  = { getRows :: PaginatedRequest -> m (Maybe (PaginatedResponse row))
     , columns :: Array (Column row)
     , pageSize :: Int
     , sortColumn :: String
     , sortOrder :: SortOrder
     }
 
-type State row
-  = { getRows :: PaginatedRequest -> Aff (Maybe (PaginatedResponse row))
+type State m row
+  = { getRows :: PaginatedRequest -> m (Maybe (PaginatedResponse row))
     , response :: Maybe (PaginatedResponse row)
     , columns :: Array (Column row)
     , pageSize :: Int
@@ -76,7 +75,7 @@ data Action
   | ChangePageSize Int
   | Refresh
 
-component :: forall row q o m. MonadAff m => H.Component HH.HTML q (Input row) o m
+component :: forall row q o m. MonadEffect m => H.Component HH.HTML q (Input m row) o m
 component = 
   H.mkComponent 
   { initialState: \input -> 
@@ -96,7 +95,7 @@ component =
   }
 
 
-handleAction :: forall row o m. MonadAff m => Action -> H.HalogenM (State row) Action () o m Unit
+handleAction :: forall row o m. MonadEffect m => Action -> H.HalogenM (State m row) Action () o m Unit
 handleAction Refresh = do
   oldState <- H.get
   let request = { pageSize: oldState.pageSize
@@ -105,7 +104,7 @@ handleAction Refresh = do
                 , sortColumn: oldState.sortColumn
                 }
   H.modify_ (_ { isRequestActive = true })
-  response <- liftAff $ oldState.getRows request
+  response <- lift $ oldState.getRows request
   H.modify_ (_ { response = response, isRequestActive = false })
 
 handleAction (Sort remoteName) = do
@@ -131,7 +130,7 @@ handleAction (ChangePageSize pageSize) = do
 
 
 
-render :: forall row m. State row -> H.ComponentHTML Action () m
+render :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 render state =
   HH.div
   [ HP.class_ $ H.ClassName "remote-table"
@@ -141,7 +140,7 @@ render state =
   , renderPageSelector state
   ]
 
-renderTable :: forall row m. State row -> H.ComponentHTML Action () m
+renderTable :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 renderTable state = 
   HH.table_
     [ HH.thead
@@ -169,7 +168,7 @@ renderTable state =
               [ HH.fromPlainHTML $ column.displayValue row ]
     ]
 
-renderPageSize :: forall row m. State row -> H.ComponentHTML Action () m
+renderPageSize :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 renderPageSize state =
   HH.input
   [ HP.class_ $ H.ClassName "remote-table-page-size"
@@ -184,7 +183,7 @@ renderPageSize state =
        else Nothing
   ]
 
-renderPageSelector :: forall row m. State row -> H.ComponentHTML Action () m
+renderPageSelector :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 renderPageSelector state = 
   HH.span 
   [ HP.class_ $ H.ClassName "remote-table-page-selector" ] 
