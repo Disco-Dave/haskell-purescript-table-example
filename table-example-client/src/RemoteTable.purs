@@ -17,10 +17,13 @@ import Data.Maybe (Maybe(..))
 import Data.Tuple (Tuple(..))
 import Effect.Aff (Aff)
 import Effect.Aff.Class (class MonadAff, liftAff)
+import Effect.Class (liftEffect)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
+import Web.Event.Event as E
+import Web.UIEvent.MouseEvent as ME
 
 
 type PaginatedResponse row
@@ -69,7 +72,7 @@ type State row
 
 data Action
   = Sort String
-  | ChangePage Int
+  | ChangePage ME.MouseEvent Int
   | ChangePageSize Int
   | Refresh
 
@@ -117,7 +120,8 @@ handleAction (Sort remoteName) = do
         }
   handleAction Refresh
 
-handleAction (ChangePage page) = do
+handleAction (ChangePage e page) = do
+  liftEffect $ E.preventDefault $ ME.toEvent e
   when (page >= 0) $ H.modify_ (_ { page = page })
   handleAction Refresh
 
@@ -130,8 +134,7 @@ handleAction (ChangePageSize pageSize) = do
 render :: forall row m. State row -> H.ComponentHTML Action () m
 render state =
   HH.div
-  [ HP.class_ $ H.ClassName "remote-table"
-  ]
+  [ HP.class_ $ H.ClassName "remote-table" ]
   [ renderTable state
   , renderPageSize state
   , renderPageSelector state
@@ -190,14 +193,18 @@ renderPageSelector state =
       [ if state.page > 0 
           then 
             HH.a 
-            [ HE.onClick $ \_ -> Just $ ChangePage $ state.page - 1 ]
+            [ HE.onClick $ \e -> Just $ ChangePage e $ state.page - 1 
+            , HP.href "#"
+            ]
             [ HH.text "Previous" ]
           else
             HH.text ""
       , if state.page < response.totalPages - 1
           then
             HH.a 
-            [ HE.onClick $ \_ -> Just $ ChangePage $ state.page + 1 ]
+            [ HE.onClick $ \e -> Just $ ChangePage e $ state.page + 1 
+            , HP.href "#"
+            ]
             [ HH.text "Next" ]
           else
             HH.text ""
