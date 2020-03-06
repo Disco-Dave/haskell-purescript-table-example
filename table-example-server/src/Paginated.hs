@@ -2,8 +2,11 @@ module Paginated where
 
 import           Relude
 
-import           Data.Aeson
-import           Servant.API
+import           Data.Aeson                     ( (.=)
+                                                , ToJSON(..)
+                                                , object
+                                                )
+import           Servant.API                    ( FromHttpApiData(..) )
 
 import qualified Data.Text                     as Text
 

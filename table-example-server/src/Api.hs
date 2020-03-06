@@ -8,10 +8,22 @@ where
 import           Relude
 
 import           Movie                          ( Movie )
-import           Paginated
+import           Paginated                      ( SortOrder
+                                                , PaginatedResult
+                                                , PaginatedRequest(..)
+                                                )
 
-import           Servant.API
-import           Servant.Server
+import           Servant.API                    ( QueryParam'
+                                                , Required
+                                                , Get
+                                                , JSON
+                                                , (:>)
+                                                )
+import           Servant.Server                 ( ServerT
+                                                , Application
+                                                , serve
+                                                , hoistServer
+                                                )
 
 import qualified Movie
 
