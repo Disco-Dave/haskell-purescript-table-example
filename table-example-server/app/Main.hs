@@ -2,29 +2,30 @@ module Main where
 
 import           Relude
 
-import           Api                              ( makeApplication
-                                                  , makeDbEnv
-                                                  )
+import           Api                                  ( makeApplication
+                                                      , makeDbEnv
+                                                      )
 
-import           Configuration.Dotenv             ( Config(..)
-                                                  , defaultConfig
-                                                  , loadFile
-                                                  , onMissingFile
-                                                  )
-import           Configuration.Dotenv.Environment ( lookupEnv )
-import           Network.Wai.Handler.Warp         ( defaultSettings
-                                                  , runSettings
-                                                  , setBeforeMainLoop
-                                                  , setPort
-                                                  )
-import           Network.Wai.Middleware.Cors      ( simpleCors )
+import           Configuration.Dotenv                 ( Config(..)
+                                                      , defaultConfig
+                                                      , loadFile
+                                                      , onMissingFile
+                                                      )
+import           Configuration.Dotenv.Environment     ( lookupEnv )
+import           Network.Wai.Handler.Warp             ( defaultSettings
+                                                      , runSettings
+                                                      , setBeforeMainLoop
+                                                      , setPort
+                                                      )
+import           Network.Wai.Middleware.Cors          ( simpleCors )
+import           Network.Wai.Middleware.RequestLogger ( logStdout )
 
 
 main :: IO ()
 main = do
   void loadEnv
   settings <- fmap makeSettings getPort
-  app      <- simpleCors . makeApplication <$> makeDbEnv
+  app      <- logStdout . simpleCors . makeApplication <$> makeDbEnv
   runSettings settings app
  where
   printHost p = putTextLn $ "Now listening on http://localhost:" <> show p

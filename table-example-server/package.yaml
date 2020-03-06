@@ -48,6 +48,7 @@ dependencies:
 - servant-server
 - text
 - wai-cors
+- wai-extra
 - warp
 
 library:
@@ -57,17 +58,6 @@ executables:
   table-example-server-exe:
     main:                Main.hs
     source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - table-example-server
-
-tests:
-  table-example-server-test:
-    main:                Spec.hs
-    source-dirs:         test
     ghc-options:
     - -threaded
     - -rtsopts
