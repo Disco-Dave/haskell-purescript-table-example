@@ -18,14 +18,14 @@ import           Network.Wai.Handler.Warp             ( defaultSettings
                                                       , setPort
                                                       )
 import           Network.Wai.Middleware.Cors          ( simpleCors )
-import           Network.Wai.Middleware.RequestLogger ( logStdout )
+import           Network.Wai.Middleware.RequestLogger ( logStdoutDev )
 
 
 main :: IO ()
 main = do
   void loadEnv
   settings <- fmap makeSettings getPort
-  app      <- logStdout . simpleCors . makeApplication <$> makeDbEnv
+  app      <- logStdoutDev . simpleCors . makeApplication <$> makeDbEnv
   runSettings settings app
  where
   printHost p = putTextLn $ "Now listening on http://localhost:" <> show p
