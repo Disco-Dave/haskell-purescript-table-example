@@ -2,9 +2,10 @@
 
 # docker build --target dependencies --cache-from table-example-server-deps -t table-example-server-deps .
 # docker build --target app --cache-from table-example-server-deps -t table-example-server .
-# docker run --name table-example-server -p 8081:8081 table-example-server:latest
+# docker run --name table-example-server -p 8081:8081 table-example-server
 # docker stop table-example-server
 # docker rm table-example-server
+
 
 # Build application's dependencies
 #----------------------------------------------------------------------------------------------------
