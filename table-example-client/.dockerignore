@@ -1,0 +1,6 @@
+./.cache
+./.spago
+./output
+./node_modules
+./generated-docs
+
