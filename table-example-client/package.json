@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "build": "spago bundle-module -t assets/app.js && NODE_ENV=production parcel build --no-source-maps assets/index.html",
+    "build:deps": "spago build --deps-only",
     "dev": "spago build --watch & parcel assets/index.html",
     "docs": "spago docs --open",
     "clean": "rm -rf .cache .spago dist output",
