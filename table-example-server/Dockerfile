@@ -39,6 +39,9 @@ FROM ubuntu:latest AS app
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
+# Set port for the application to use
+ENV SERVER_PORT 8081
+
 # Set the locale
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
