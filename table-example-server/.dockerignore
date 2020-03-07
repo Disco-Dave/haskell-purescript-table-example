@@ -1,2 +1,3 @@
-/.stack-work
-/dist
+.stack-work
+dist
+table-example-server.cabal
