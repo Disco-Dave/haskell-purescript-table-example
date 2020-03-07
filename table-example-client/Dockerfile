@@ -9,7 +9,8 @@
 #----------------------------------------------------------------------------------------------------
 FROM node:latest AS build
 
-ENV API_URL http://localhost:8081
+ARG api_url=http://localhost:8081
+ENV API_URL $api_url
 
 RUN mkdir /opt/build
 WORKDIR /opt/build
