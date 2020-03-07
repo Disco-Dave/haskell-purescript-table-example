@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "spago build && parcel build assets/index.html",
-    "dev": "spago build --watch -x & parcel assets/index.html",
+    "build": "spago bundle-module -t assets/app.js && NODE_ENV=production parcel build --no-source-maps assets/index.html",
+    "dev": "spago build --watch & parcel assets/index.html",
     "docs": "spago docs --open",
     "clean": "rm -rf .cache .spago dist output"
   },
@@ -15,5 +15,6 @@
     "parcel": "^1.12.4",
     "purescript": "^0.13.6",
     "spago": "^0.14.0"
-  }
+  },
+  "dependencies": {}
 }

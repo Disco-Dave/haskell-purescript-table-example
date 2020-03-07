@@ -1,6 +1,14 @@
-const Main = require('../output/Main');
+let Main;
+
+if (process.env.NODE_ENV === 'production') {
+    Main = require('./app.js');
+} else {
+    Main = require('../output/Main');
+}
 
 function main () {
+  console.log(process.env.MODE)
+  console.log(process.env.API_URL)
   Main.main(process.env.API_URL)();
 }
 
