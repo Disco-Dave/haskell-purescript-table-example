@@ -9,9 +9,6 @@
 #----------------------------------------------------------------------------------------------------
 FROM node:latest AS build
 
-ARG api_url=http://localhost:8081
-ENV API_URL $api_url
-
 RUN mkdir /opt/build
 WORKDIR /opt/build
 
@@ -22,6 +19,9 @@ RUN npm install
 # Install purescript dependencies
 COPY ./spago.dhall ./packages.dhall ./
 RUN npm run build:deps
+
+ARG api_url=http://localhost:8081
+ENV API_URL $api_url
 
 COPY . .
 RUN npm run build
