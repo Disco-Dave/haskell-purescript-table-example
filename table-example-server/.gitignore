@@ -1,3 +1,4 @@
 .stack-work/
 table-example-server.cabal
 *~
+dist
