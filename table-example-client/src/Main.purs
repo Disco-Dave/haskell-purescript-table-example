@@ -1,14 +1,16 @@
 module Main where
 
 import Prelude
+import AppM as App
 import Data.Symbol (SProxy(..))
 import Effect (Effect)
-import Effect.Aff (Aff)
+import Effect.Class (class MonadEffect)
 import Halogen as H
-import Halogen.HTML as HH
 import Halogen.Aff as HA
+import Halogen.HTML as HH
 import Halogen.VDom.Driver (runUI)
 import MovieTable as MovieTable
+
 
 type ChildSlots =
   ( movies :: MovieTable.Slot Unit
@@ -17,7 +19,11 @@ type ChildSlots =
 _movies :: SProxy "movies"
 _movies = SProxy
 
-mainComponent :: forall q i o. H.Component HH.HTML q i o Aff
+mainComponent 
+  :: forall q i o m
+   . MonadEffect m 
+  => MovieTable.MoviesGetter m 
+  => H.Component HH.HTML q i o m
 mainComponent =
   H.mkComponent
     { initialState: const unit
@@ -30,8 +36,9 @@ mainComponent =
       [ HH.slot _movies unit MovieTable.component unit absurd
       ]
 
-main :: Effect Unit
-main =
+main :: String -> Effect Unit
+main apiUrl = do
   HA.runHalogenAff $ do
     body <- HA.awaitBody
-    runUI mainComponent unit body
+    let nt = App.runAppM apiUrl
+    runUI (H.hoist nt mainComponent) unit body
