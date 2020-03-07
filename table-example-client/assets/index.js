@@ -7,8 +7,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function main () {
-  console.log(process.env.MODE)
-  console.log(process.env.API_URL)
   Main.main(process.env.API_URL)();
 }
 

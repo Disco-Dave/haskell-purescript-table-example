@@ -6,7 +6,8 @@
     "build": "spago bundle-module -t assets/app.js && NODE_ENV=production parcel build --no-source-maps assets/index.html",
     "dev": "spago build --watch & parcel assets/index.html",
     "docs": "spago docs --open",
-    "clean": "rm -rf .cache .spago dist output"
+    "clean": "rm -rf .cache .spago dist output",
+    "prod": "npm run build && serve dist"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "parcel": "^1.12.4",
     "purescript": "^0.13.6",
+    "serve": "^11.3.0",
     "spago": "^0.14.0"
   },
   "dependencies": {}
