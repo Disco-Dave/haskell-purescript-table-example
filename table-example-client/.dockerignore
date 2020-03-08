@@ -1,4 +1,5 @@
 ./.cache
+./.parcel-cache
 ./.spago
 ./output
 ./node_modules

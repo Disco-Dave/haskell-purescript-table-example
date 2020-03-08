@@ -5,6 +5,7 @@
 /output/
 /generated-docs/
 /.cache/
+/.parcel-cache/
 /.psc-package/
 /.psc*
 /.purs*

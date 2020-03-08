@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "parcel": "^1.12.4",
+    "parcel": "^2.0.0-alpha.3.2",
     "purescript": "^0.13.6",
     "serve": "^11.3.0",
     "spago": "^0.14.0"
