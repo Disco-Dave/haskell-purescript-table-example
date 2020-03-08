@@ -22,6 +22,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Utils.Events as Events
+import Utils.Css as Css
 import Web.UIEvent.MouseEvent (MouseEvent)
 
 
@@ -142,12 +143,13 @@ render state =
 
 renderTable :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 renderTable state = 
-  HH.table_
-    [ HH.thead
-      [ HP.class_ $ H.ClassName $ if state.isRequestActive
-          then "loading"
-          else ""
+  HH.table
+    [ Css.classes 
+      [ Css.Always "content-table"
+      , Css.When state.isRequestActive "loading"
       ]
+    ]
+    [ HH.thead_
       [ HH.tr_ $ state.columns <#> \column ->
           HH.th
           [ HE.onClick $ \_ -> Just $ Sort column.remoteName
