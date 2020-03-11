@@ -137,8 +137,11 @@ render state =
   [ HP.class_ $ H.ClassName "remote-table"
   ]
   [ renderTable state
-  , renderPageSize state
-  , renderPageSelector state
+  , HH.div 
+    [ Css.classes [ Css.Always "remote-table-controls" ] ]
+    [ renderPageSize state
+    , renderPageSelector state
+    ]
   ]
 
 renderTable :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
@@ -197,6 +200,7 @@ renderPageSelector state =
             HH.a 
             [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page - 1 
             , HP.href "#"
+            , Css.classes [ Css.Always "page-previous"]
             ]
             [ HH.text "Previous" ]
           else
@@ -206,6 +210,7 @@ renderPageSelector state =
             HH.a 
             [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page + 1 
             , HP.href "#"
+            , Css.classes [ Css.Always "page-next"]
             ]
             [ HH.text "Next" ]
           else
