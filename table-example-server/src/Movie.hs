@@ -80,18 +80,8 @@ parseRow row =
     <*> parse 7
  where
   rawFields = Text.splitOn "," row
-  parseText i = Text.strip <$> lookup rawFields i
+  parseText i = Text.strip <$> (rawFields !!? i)
   parse i = parseText i >>= (readMaybe . toString)
   parseMoney i = do
     field <- Text.drop 1 <$> parseText i
     readMaybe $ toString field
-
-lookup :: [a] -> Int -> Maybe a
-lookup xs i | i < 0     = Nothing
-            | otherwise = go i xs
- where
-  go :: Int -> [a] -> Maybe a
-  go 0 (x : _ ) = Just x
-  go j (_ : ys) = go (j - 1) ys
-  go _ []       = Nothing
-{-# INLINE lookup #-}
