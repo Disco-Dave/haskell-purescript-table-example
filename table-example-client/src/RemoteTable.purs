@@ -134,11 +134,11 @@ handleAction (ChangePageSize pageSize) = do
 render :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Action () m
 render state =
   HH.div
-  [ HP.class_ $ H.ClassName "remote-table"
+  [ HP.class_ $ H.ClassName "table-container"
   ]
   [ renderTable state
   , HH.div 
-    [ Css.classes [ Css.Always "remote-table-controls" ] ]
+    [ Css.classes [ Css.Always "level" ] ]
     [ renderPageSize state
     , renderPageSelector state
     ]
@@ -148,7 +148,7 @@ renderTable :: forall row m. MonadEffect m => State m row -> H.ComponentHTML Act
 renderTable state = 
   HH.table
     [ Css.classes 
-      [ Css.Always "content-table"
+      [ Css.Always "table"
       , Css.When state.isRequestActive "loading"
       ]
     ]
@@ -200,7 +200,7 @@ renderPageSelector state =
             HH.a 
             [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page - 1 
             , HP.href "#"
-            , Css.classes [ Css.Always "page-previous"]
+            , Css.classes [ Css.Always "button is-small"]
             ]
             [ HH.text "Previous" ]
           else
@@ -210,7 +210,7 @@ renderPageSelector state =
             HH.a 
             [ HE.onClick $ \evt -> Just $ ChangePage evt $ state.page + 1 
             , HP.href "#"
-            , Css.classes [ Css.Always "page-next"]
+            , Css.classes [ Css.Always "button is-small"]
             ]
             [ HH.text "Next" ]
           else

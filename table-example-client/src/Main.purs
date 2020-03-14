@@ -10,6 +10,7 @@ import Halogen.Aff as HA
 import Halogen.HTML as HH
 import Halogen.VDom.Driver (runUI)
 import MovieTable as MovieTable
+import Utils.Css as Css
 
 
 type ChildSlots =
@@ -32,7 +33,8 @@ mainComponent =
     }
   where
   render unit = 
-    HH.div_
+    HH.div
+      [ Css.classes [ Css.Always "container" ] ]
       [ HH.slot _movies unit MovieTable.component unit absurd
       ]
 
